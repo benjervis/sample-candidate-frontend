@@ -28,7 +28,8 @@ export const JobsPage = () => {
 
           <Actions>
             <Button
-              weight="strong"
+              variant="solid"
+              tone="brandAccent"
               onClick={() => setOpenNewJobFormDialog(true)}
             >
               Post new job

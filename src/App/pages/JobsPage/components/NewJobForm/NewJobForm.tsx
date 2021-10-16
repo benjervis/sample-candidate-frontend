@@ -128,7 +128,12 @@ export const NewJobForm = ({ closeForm }: NewJobFormProps) => {
             </FormikBraidDropdown>
 
             <Actions>
-              <Button weight="strong" type="submit" loading={isSubmitting}>
+              <Button
+                variant="solid"
+                tone="brandAccent"
+                type="submit"
+                loading={isSubmitting}
+              >
                 {isSubmitting ? 'Saving' : 'Save'}
               </Button>
               <TextLinkButton onClick={closeForm}>Cancel</TextLinkButton>
