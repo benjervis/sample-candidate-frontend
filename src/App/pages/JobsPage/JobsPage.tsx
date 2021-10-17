@@ -1,52 +1,49 @@
 import {
   Actions,
-  Box,
   Button,
-  Dialog,
-  Heading,
+  Column,
+  Columns,
   Stack,
+  TextField,
 } from 'braid-design-system';
 import React, { useState } from 'react';
 
 import { JobsListProvider } from './JobsContext';
 import { JobsList } from './components/JobsList/JobsList';
-import { NewJobForm } from './components/NewJobForm/NewJobForm';
 
 export const JobsPage = () => {
-  const [openNewJobFormDialog, setOpenNewJobFormDialog] = useState(false);
+  const [searchText, setSearchText] = useState('');
 
   return (
     <JobsListProvider>
       <Stack space="medium" dividers>
-        <Box
-          paddingLeft="gutter"
-          display="flex"
-          justifyContent="spaceBetween"
-          alignItems="center"
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            console.log('Searched');
+          }}
         >
-          <Heading level="2">Posted jobs</Heading>
-
-          <Actions>
-            <Button
-              variant="solid"
-              tone="brandAccent"
-              onClick={() => setOpenNewJobFormDialog(true)}
-            >
-              Post new job
-            </Button>
-          </Actions>
-        </Box>
+          <Columns space="medium" align="center" alignY="center">
+            <Column width="1/2">
+              <TextField
+                id="searchBar"
+                aria-label="search field"
+                placeholder="e.g. Mechanical Engineer"
+                value={searchText}
+                onChange={(e) => setSearchText(e.currentTarget.value)}
+              />
+            </Column>
+            <Column width="content">
+              <Actions>
+                <Button variant="solid" bleedY type="submit">
+                  Search
+                </Button>
+              </Actions>
+            </Column>
+          </Columns>
+        </form>
 
         <JobsList />
-
-        <Dialog
-          id="NewJobFormDialog"
-          title="Post new job"
-          open={openNewJobFormDialog}
-          onClose={() => setOpenNewJobFormDialog(false)}
-        >
-          <NewJobForm closeForm={() => setOpenNewJobFormDialog(false)} />
-        </Dialog>
       </Stack>
     </JobsListProvider>
   );
