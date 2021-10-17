@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/server';
+import { StaticRouter } from 'react-router';
 import { Render } from 'sku';
 
 import App from './App/App';
@@ -11,7 +12,7 @@ interface RenderContext {
 }
 
 const skuRender: Render<RenderContext> = {
-  renderApp: ({ SkuProvider, environment }) => {
+  renderApp: ({ SkuProvider, environment, route }) => {
     if (!isEnvironment(environment)) {
       throw Error(`unrecognised environment: ${environment}`);
     }
@@ -19,7 +20,9 @@ const skuRender: Render<RenderContext> = {
     const appHtml = ReactDOM.renderToString(
       <SkuProvider>
         <EnvironmentProvider value={environment}>
-          <App />
+          <StaticRouter location={route}>
+            <App />
+          </StaticRouter>
         </EnvironmentProvider>
       </SkuProvider>,
     );
