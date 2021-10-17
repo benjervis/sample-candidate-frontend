@@ -13,6 +13,7 @@ import { JobsList } from './components/JobsList/JobsList';
 
 export const JobsPage = () => {
   const [searchText, setSearchText] = useState('');
+  const [searchTerm, setSearchTerm] = useState<string>();
 
   return (
     <JobsListProvider>
@@ -20,7 +21,7 @@ export const JobsPage = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            console.log('Searched');
+            setSearchTerm(searchText);
           }}
         >
           <Columns space="medium" align="center" alignY="center">
@@ -31,6 +32,10 @@ export const JobsPage = () => {
                 placeholder="e.g. Mechanical Engineer"
                 value={searchText}
                 onChange={(e) => setSearchText(e.currentTarget.value)}
+                onClear={() => {
+                  setSearchText('');
+                  setSearchTerm(undefined);
+                }}
               />
             </Column>
             <Column width="content">
@@ -43,7 +48,7 @@ export const JobsPage = () => {
           </Columns>
         </form>
 
-        <JobsList />
+        <JobsList searchTerm={searchTerm} />
       </Stack>
     </JobsListProvider>
   );

@@ -5,18 +5,22 @@ import { useJobsList } from '../../JobsContext';
 
 import { JobCard } from './components/JobCard/JobCard';
 
-export const JobsList = () => {
+interface JobsListProps {
+  searchTerm?: string;
+}
+
+export const JobsList = ({ searchTerm }: JobsListProps) => {
   const { jobsList, loadJobs } = useJobsList();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
       setLoading(true);
-      await loadJobs();
+      await loadJobs(searchTerm);
       setLoading(false);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchTerm]);
 
   if (loading) {
     return (

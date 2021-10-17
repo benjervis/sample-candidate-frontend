@@ -14,9 +14,20 @@ let store = Object.values(sampleJobs);
 const timeout = () => new Promise((resolve) => setTimeout(resolve, 1500));
 
 export const createJobsClient = () => ({
-  get: async (): Promise<Job[]> => {
+  get: async (searchTerm?: string): Promise<Job[]> => {
     await timeout();
-    return store;
+
+    if (!searchTerm) {
+      return store;
+    }
+
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
+    return store.filter(
+      (job) =>
+        job.title.toLowerCase().includes(lowerCaseSearchTerm) ||
+        job.description.toLowerCase().includes(lowerCaseSearchTerm),
+    );
   },
   create: async (newDetails: JobInput): Promise<Job> => {
     const newJob: Job = {

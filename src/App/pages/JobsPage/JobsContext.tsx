@@ -6,7 +6,7 @@ import { Job, JobInput } from 'src/types';
 interface JobsListContext {
   jobsList: Job[];
   addJob: (newJob: JobInput) => Promise<void>;
-  loadJobs: () => Promise<void>;
+  loadJobs: (searchTerm?: string) => Promise<void>;
   removeJob: (jobIdToRemove: string) => Promise<void>;
 }
 
@@ -35,8 +35,8 @@ export const JobsListProvider = ({ children }: JobsListProviderProps) => {
   const [jobsList, setJobsList] = useState<Job[]>([]);
   const api = useApi();
 
-  const loadJobs = async () => {
-    const newJobsList = await api.jobs.get();
+  const loadJobs = async (searchTerm?: string) => {
+    const newJobsList = await api.jobs.get(searchTerm);
     const sortedJobsJList = newJobsList.sort((a, b) =>
       a.postedDate > b.postedDate ? 1 : -1,
     );
