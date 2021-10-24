@@ -5,5 +5,5 @@ module.exports = {
   sites: [{ name: 'apac', host: 'dev.apac.com' }],
   publicPath: '/', // <-- Required for sku build output
   orderImports: true,
-  routes: ['/', '/job/:jobId'],
+  routes: ['/', '/job/$jobId', '/job/$jobId/apply'],
 };
