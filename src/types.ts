@@ -4,7 +4,7 @@ export interface ClientContext {
   environment: Environment;
 }
 
-export interface Job {
+export interface JobRecord {
   hirerId: string;
   title: string;
   description: string;
@@ -14,30 +14,9 @@ export interface Job {
   postedDate: string;
 }
 
-export type JobInput = Omit<Job, 'id' | 'postedDate'>;
+export type Job = Omit<JobRecord, 'hirerId'> & { hirer: Hirer };
 
-export interface Candidate {
+export interface Hirer {
   id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
+  name: string;
 }
-
-export interface ApplicationQuestion {
-  id: string;
-  questionText: string;
-  answer: string;
-}
-
-export interface Application {
-  id: string;
-  jobId: string;
-  candidateId: string;
-  resumeLink: string;
-  coverLetterText: string;
-  questions: ApplicationQuestion[];
-}
-
-export type ApplicationWithCandidate = Omit<Application, 'candidateId'> & {
-  candidate: Candidate;
-};

@@ -1,9 +1,7 @@
-import { createApplicationsClient } from './applications';
-import { createCandidatesClient } from './candidates';
+import { createHirersClient } from './hirers';
 import { createJobsClient } from './jobs';
 
 export const useApi = () => ({
+  hirers: createHirersClient(),
   jobs: createJobsClient(),
-  applications: createApplicationsClient(),
-  candidates: createCandidatesClient(),
 });
