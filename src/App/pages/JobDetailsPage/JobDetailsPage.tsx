@@ -4,6 +4,7 @@ import {
   ButtonLink,
   Card,
   Heading,
+  Loader,
   Stack,
   Text,
   TextLink,
@@ -22,14 +23,20 @@ interface JobDetailsPageProps {}
 
 export const JobDetailsPage = ({}: JobDetailsPageProps) => {
   const { jobId } = useParams<{ jobId: string }>();
+  const [isClient, setIsClient] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [job, setJob] = useState<Job>();
 
   const { getJob } = useJobsList();
 
   useEffect(() => {
+    setIsClient(true);
+
     const retrieve = async () => {
+      setLoading(true);
       const result = await getJob(jobId);
       setJob(result);
+      setLoading(false);
     };
 
     retrieve();
@@ -37,12 +44,20 @@ export const JobDetailsPage = ({}: JobDetailsPageProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobId, getJob]);
 
+  if (!isClient || loading) {
+    return (
+      <Card>
+        <Loader />
+      </Card>
+    );
+  }
+
   if (!jobId || !job) {
     return (
-      <Alert tone="critical">
+      <Alert tone="caution">
         <Text>
           404: Not found. Click <TextLink href="/">here</TextLink> to return to
-          homepage.
+          home page.
         </Text>
       </Alert>
     );
