@@ -31,7 +31,7 @@ export default () => {
     <BraidProvider theme={apac} linkComponent={CustomLink}>
       <Stack space="medium">
         <Box background="brand">
-          <ContentBlock>
+          <ContentBlock width="small">
             <Box
               paddingY="large"
               paddingX="gutter"
@@ -45,7 +45,7 @@ export default () => {
           </ContentBlock>
         </Box>
 
-        <ContentBlock>
+        <ContentBlock width="small">
           <Router />
         </ContentBlock>
       </Stack>

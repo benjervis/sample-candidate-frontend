@@ -1,20 +1,18 @@
 import React, { createContext, useContext, useMemo, useState } from 'react';
 
 import { useApi } from 'src/App/api';
-import { Job, JobInput } from 'src/types';
+import { Job } from 'src/types';
 
 interface JobsListContext {
   jobsList: Job[];
-  addJob: (newJob: JobInput) => Promise<void>;
   loadJobs: (searchTerm?: string) => Promise<void>;
-  removeJob: (jobIdToRemove: string) => Promise<void>;
+  getJob: (jobId: string) => Promise<Job | undefined>;
 }
 
 const JobsContext = createContext<JobsListContext>({
   jobsList: [],
   loadJobs: () => new Promise(() => {}),
-  addJob: () => new Promise(() => {}),
-  removeJob: () => new Promise(() => {}),
+  getJob: () => new Promise(() => {}),
 });
 
 export const useJobsList = () => {
@@ -36,26 +34,37 @@ export const JobsListProvider = ({ children }: JobsListProviderProps) => {
   const api = useApi();
 
   const loadJobs = async (searchTerm?: string) => {
-    const newJobsList = await api.jobs.get(searchTerm);
-    const sortedJobsJList = newJobsList.sort((a, b) =>
+    const newJobRecordsList = await api.jobs.get(searchTerm);
+
+    const sortedJobRecordsList = newJobRecordsList.sort((a, b) =>
       a.postedDate > b.postedDate ? 1 : -1,
     );
-    setJobsList(sortedJobsJList);
+
+    const sortedJobsList = await Promise.all(
+      sortedJobRecordsList.map(async (job) => {
+        const hirer = await api.hirers.getById(job.hirerId);
+
+        if (!hirer) {
+          throw new Error(`No hirer exists with ID ${job.hirerId}`);
+        }
+
+        return { ...job, hirer };
+      }),
+    );
+
+    setJobsList(sortedJobsList);
   };
 
-  const addJob = async (newJobDetails: JobInput) => {
-    const oldJobs = [...jobsList];
-    const newJob = await api.jobs.create(newJobDetails);
-    setJobsList([...oldJobs, newJob]);
-  };
+  const getJob = async (jobId: string) => {
+    if (jobsList.length === 0) {
+      await loadJobs();
+    }
 
-  const removeJob = async (jobIdToRemove: string) => {
-    await api.jobs.delete(jobIdToRemove);
-    setJobsList((prev) => prev.filter((job) => job.id !== jobIdToRemove));
+    return jobsList.find((job) => job.id === jobId);
   };
 
   const value = useMemo(
-    () => ({ jobsList, addJob, removeJob, loadJobs }),
+    () => ({ jobsList, loadJobs, getJob }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [jobsList],
   );
