@@ -20,3 +20,11 @@ export interface Hirer {
   id: string;
   name: string;
 }
+
+export interface ApplicationInput {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  answers: string[];
+}

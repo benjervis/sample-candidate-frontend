@@ -2,6 +2,8 @@ import { Alert, Card, Loader, Text, TextLink } from 'braid-design-system';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
+import { ApplyForm } from './components/ApplyForm';
+
 export const ApplicationPage = () => {
   const { jobId } = useParams<{ jobId: string }>();
   const [isClient, setIsClient] = useState(false);
@@ -29,5 +31,5 @@ export const ApplicationPage = () => {
     );
   }
 
-  return <Text>{jobId}</Text>;
+  return <ApplyForm jobId={jobId} />;
 };
